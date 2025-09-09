@@ -1,0 +1,115 @@
+# ============
+# HISTÓRICO
+# ============
+HISTSIZE=10000
+SAVEHIST=10000
+HISTFILE=~/.zsh_history
+setopt SHARE_HISTORY
+setopt HIST_VERIFY
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_IGNORE_SPACE
+setopt HIST_REDUCE_BLANKS
+
+# ============
+# ALIASES
+# ============
+
+# Docker
+alias dockerrm='docker rm $(docker ps -a -q)'
+alias dockerstop='docker stop $(docker ps -a -q)'
+
+# SSH
+alias serverblog='ssh forge@159.89.86.23 -i ~/.ssh/server-digital-ocean.key'
+alias servercode='ssh forge@206.189.255.17 -i ~/.ssh/server-digital-ocean.key'
+alias serverson='ssh forge@138.197.227.120 -i ~/.ssh/server-digital-ocean.key'
+alias ssh-load='eval $(ssh-agent -s)'
+
+# Git extra
+alias gs='git status'
+alias ga='git add'
+alias gc='git commit'
+alias gp='git push'
+alias gl='git pull'
+alias gd='git diff'
+alias gco='git checkout'
+alias gb='git branch'
+
+# Segurança
+alias rm='rm -i'
+alias cp='cp -i'
+alias mv='mv -i'
+
+# Navegação
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias .....='cd ../../../..'
+
+# Informações de sistema
+alias myip='curl http://ipecho.net/plain; echo'
+alias diskspace='df -h'
+
+# Desenvolvimento
+alias serve='python3 -m http.server 8000'
+alias jsonformat='python3 -m json.tool'
+alias sail='[ -f sail ] && sh sail || sh vendor/bin/sail'
+alias k=kubectl
+
+# Modernos
+alias cat='bat'
+alias fd='fd'
+alias ls='exa --icons'
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+alias lh='ls -lah'
+alias tree='exa --tree'
+
+# ============
+# FUNÇÕES
+# ============
+
+# Criar e entrar em diretório
+mkcd() {
+    mkdir -p "$1" && cd "$1"
+}
+
+# Extrair arquivos
+extract() {
+    if [ -f "$1" ]; then
+        case "$1" in
+            *.tar.bz2)   tar xjf "$1" ;;
+            *.tar.gz)    tar xzf "$1" ;;
+            *.bz2)       bunzip2 "$1" ;;
+            *.rar)       unrar e "$1" ;;
+            *.gz)        gunzip "$1" ;;
+            *.tar)       tar xf "$1" ;;
+            *.tbz2)      tar xjf "$1" ;;
+            *.tgz)       tar xzf "$1" ;;
+            *.zip)       unzip "$1" ;;
+            *.Z)         uncompress "$1" ;;
+            *.7z)        7z x "$1" ;;
+            *)           echo "'$1' não pode ser extraído com extract()" ;;
+        esac
+    else
+        echo "'$1' não é um arquivo válido"
+    fi
+}
+
+# Encontrar processo por nome
+findproc() {
+    ps aux | grep -i "$1" | grep -v grep
+}
+
+# Backup rápido
+backup() {
+    cp "$1" "$1.backup.$(date +%Y%m%d_%H%M%S)"
+}
+
+# ============
+# COMPLETION
+# ============
+autoload -U compinit && compinit
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+zstyle ':completion:*' menu select

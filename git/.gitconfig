@@ -1,0 +1,5 @@
+[user]
+	name = Renato Castro
+	email = rspindola@live.com
+[core]
+	editor = code --wait
